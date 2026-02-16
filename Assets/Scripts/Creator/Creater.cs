@@ -26,9 +26,11 @@ public class Creater : MonoBehaviour
             {
                 case 0:
                     block.Decorate(new UncorrectBlock(new NullBlock(), Color.red));
+                    this.GetComponent<CoreGameManager>().UncorrectCount++;
                     break;
                 case 1:
                     block.Decorate(new CorrectBlock(new NullBlock(), Color.yellow));
+                    this.GetComponent<CoreGameManager>().CorrectCount++;
                     break;
             }
         }

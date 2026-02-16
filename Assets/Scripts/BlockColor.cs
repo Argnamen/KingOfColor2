@@ -17,6 +17,11 @@ public class BlockColor : MonoBehaviour
     public void Touch()
     {
         _block.Touch();
+
+        if(_block.TouchHealth <= 0)
+        {
+            GenericPool.Shared.pool.Release(this);
+        }
     }
     public void Reset()
     {
