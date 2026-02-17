@@ -6,7 +6,7 @@ using UnityEngine;
 public class UncorrectBlock : Decorator
 {
     public static event Action<IBlock> OnTouchUncorrect;
-    public UncorrectBlock(IBlock block, Color color) : base(block, color)
+    public UncorrectBlock(IBlock block) : base(block)
     {
         TouchHealth = 2;
     }

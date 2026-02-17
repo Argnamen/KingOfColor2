@@ -9,10 +9,10 @@ public abstract class Decorator : IBlock
 
     protected IBlock _block;
 
-    public Decorator(IBlock block, Color color)
+    public Decorator(IBlock block)
     {
         _block = block;
-        NewColor = color;
+        NewColor = _block.NewColor;
     }
 
     public virtual void Touch()

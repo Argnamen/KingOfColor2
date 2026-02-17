@@ -5,26 +5,26 @@ using UnityEngine;
 
 public class BlockColor : MonoBehaviour
 {
-    private IBlock _block;
+    public IBlock Block;
 
     public void Decorate(IBlock block)
     {
-        _block = block;
+        Block = block;
 
-        this.GetComponent<Renderer>().material.SetColor("_Color", _block.NewColor);
+        this.GetComponent<Renderer>().material.SetColor("_Color", Block.NewColor);
     }
 
     public void Touch()
     {
-        _block.Touch();
+        Block.Touch();
 
-        if(_block.TouchHealth <= 0)
+        if(Block.TouchHealth <= 0)
         {
             GenericPool.Shared.pool.Release(this);
         }
     }
     public void Reset()
     {
-        _block = new NullBlock();
+        Block = new NullBlock(UnityEngine.Color.white);
     }
 }

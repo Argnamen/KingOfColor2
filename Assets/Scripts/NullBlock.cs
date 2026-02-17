@@ -8,10 +8,10 @@ public class NullBlock : IBlock
 
     public Color NewColor {  get; protected set; }
 
-    public NullBlock()
+    public NullBlock(Color color)
     {
         TouchHealth = 1;
-        NewColor = Color.white;
+        NewColor = color;
     }
 
     public void Touch()
