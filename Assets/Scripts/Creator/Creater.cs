@@ -45,6 +45,8 @@ public class Creater : MonoBehaviour
     {
         Vector3[] grid;
 
+        _blocks = new List<BlockColor>();
+
         switch (_coreGameManager.CountBoxForLevel)
         {
             case 3:
@@ -86,34 +88,69 @@ public class Creater : MonoBehaviour
 
             block.transform.position = pos;
 
-            switch (Random.Range(0, 2))
-            {
-                case 0:
-                    block.Decorate(new UncorrectBlock(new NullBlock(Color.red)));
-                    _coreGameManager.UncorrectCount++;
-                    break;
-                case 1:
-                    block.Decorate(new CorrectBlock(new NullBlock(Color.yellow)));
-                    _coreGameManager.CorrectCount++;
-                    break;
-            }
-
             _blocks.Add(block);
         }
+
+        CreateColorForBox();
     }
 
-    private void UpdateBox()
+    private void UpdateBox() //метод на запуски под уровней (промежутка между уровнями, когда не все блоки пропали с поля)
     {
+        Debug.Log(_coreGameManager.ColorObjects.Count);
+
+        ColorObject correct = _coreGameManager.ColorObjects[_coreGameManager.ColorObjects.Count - 1];
+
+        _coreGameManager.UncorrectCount = 0;
+        _coreGameManager.CorrectCount = 0;
+
         foreach (var block in _blocks)
         {
             if (block.gameObject.activeSelf)
             {
-                block.Decorate(new CorrectBlock(block.Block));
-                _coreGameManager.CorrectCount++;
-                _coreGameManager.UncorrectCount--;
+                if (block.Block.NewColor == correct.Color)
+                {
+                    block.Decorate(new CorrectBlock(block.Block));
+                    _coreGameManager.CorrectCount++;
+                }
+                else
+                {
+                    block.Decorate(new UncorrectBlock(block.Block));
+                    _coreGameManager.UncorrectCount++;
+                }
             }
         }
+    }
 
-        _blocks = new List<BlockColor>();
+    private void CreateColorForBox() //метод на первый запуск уровня
+    {
+        Debug.Log(_coreGameManager.ColorObjects.Count);
+        ColorObject correct = _coreGameManager.ColorObjects[_coreGameManager.ColorObjects.Count - 1];
+
+        _coreGameManager.UncorrectCount = 0;
+        _coreGameManager.CorrectCount = 0;
+
+        for(int i = 0; i < _blocks.Count; i++)
+        {
+            ColorObject randomColor = _coreGameManager.ColorObjects[Random.Range(0, _coreGameManager.ColorObjects.Count)];
+
+            if(i < _coreGameManager.ColorObjects.Count - 1) //Задать минимум по 1 блоку каждого из доступных цветов
+            {
+                randomColor = _coreGameManager.ColorObjects[i];
+            }
+
+            if (_blocks[i].gameObject.activeSelf)
+            {
+                if (randomColor.Color == correct.Color)
+                {
+                    _blocks[i].Decorate(new CorrectBlock(new NullBlock(randomColor.Color)));
+                    _coreGameManager.CorrectCount++;
+                }
+                else
+                {
+                    _blocks[i].Decorate(new UncorrectBlock(new NullBlock(randomColor.Color)));
+                    _coreGameManager.UncorrectCount++;
+                }
+            }
+        }
     }
 }
