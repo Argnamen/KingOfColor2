@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CoreGameManager
@@ -59,9 +60,34 @@ public class CoreGameManager
         ProcentErrorColor = (int)(Mathf.Pow(Level / 2f, 2) + 0f);
         CountColorsForLevel = (int)(Mathf.Pow(Level / 3f, 2) + 2f);
 
+        List<ColorObject> colorObjectForRandom = new List<ColorObject>(_baseColorObject);
+
         for(int i = 0;  i < CountColorsForLevel && i < 4; i++)
         {
-            ColorObjects.Add(_baseColorObject[i]);
+            ColorObjects.Add(colorObjectForRandom[Random.Range(0, colorObjectForRandom.Count)]);
+
+            colorObjectForRandom.Remove(ColorObjects[i]);
         }
+
+        for (int i = 0; i < CountColorsForLevel && i < 4; i++)
+        {
+            if(Random.Range(0,100) <= ProcentErrorColor)
+            {
+                SwithName();
+            }
+        }
+    }
+
+    private void SwithName()
+    {
+        int objNumber1 = Random.Range(0, ColorObjects.Count); //Берём случаный номер объекта для замены имени
+        int objNumber2 = ColorObjects.Count - 1 - objNumber1; //Заменяем у выбраного объекта имя на следующее в списке доступных объектов
+
+        var nameObj1 = ColorObjects[objNumber1].Name;
+
+        ColorObjects[objNumber1] = new ColorObject(ColorObjects[objNumber2].Name, ColorObjects[objNumber1].Color);
+        ColorObjects[objNumber2] = new ColorObject(nameObj1, ColorObjects[objNumber2].Color);
+
+
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Creater : MonoBehaviour
 {
+    [SerializeField] private ColorUI _colorUI;
     private CoreGameManager _coreGameManager;
 
     private List<BlockColor> _blocks = new List<BlockColor>();
@@ -100,6 +101,8 @@ public class Creater : MonoBehaviour
 
         ColorObject correct = _coreGameManager.ColorObjects[_coreGameManager.ColorObjects.Count - 1];
 
+        _colorUI.UpdateText(correct);
+
         _coreGameManager.UncorrectCount = 0;
         _coreGameManager.CorrectCount = 0;
 
@@ -126,6 +129,8 @@ public class Creater : MonoBehaviour
         Debug.Log(_coreGameManager.ColorObjects.Count);
         ColorObject correct = _coreGameManager.ColorObjects[_coreGameManager.ColorObjects.Count - 1];
 
+        _colorUI.UpdateText(correct);
+
         _coreGameManager.UncorrectCount = 0;
         _coreGameManager.CorrectCount = 0;
 
@@ -133,7 +138,7 @@ public class Creater : MonoBehaviour
         {
             ColorObject randomColor = _coreGameManager.ColorObjects[Random.Range(0, _coreGameManager.ColorObjects.Count)];
 
-            if(i < _coreGameManager.ColorObjects.Count - 1) //Задать минимум по 1 блоку каждого из доступных цветов
+            if(i < _coreGameManager.ColorObjects.Count) //Задать минимум по 1 блоку каждого из доступных цветов
             {
                 randomColor = _coreGameManager.ColorObjects[i];
             }
