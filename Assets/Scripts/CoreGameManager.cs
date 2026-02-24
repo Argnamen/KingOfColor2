@@ -87,7 +87,5 @@ public class CoreGameManager
 
         ColorObjects[objNumber1] = new ColorObject(ColorObjects[objNumber2].Name, ColorObjects[objNumber1].Color);
         ColorObjects[objNumber2] = new ColorObject(nameObj1, ColorObjects[objNumber2].Color);
-
-
     }
 }

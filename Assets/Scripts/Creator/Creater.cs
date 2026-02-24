@@ -36,19 +36,19 @@ public class Creater : MonoBehaviour
                 }
                 else if(_coreGameManager.CorrectCount <= 0)
                 {
-                    UpdateBox();
+                    CreateColorForBox();
                 }
             }
         }
     }
 
-    private void GenerateNewBox()
+    private Vector3[] GetGrid(int size)
     {
         Vector3[] grid;
 
         _blocks = new List<BlockColor>();
 
-        switch (_coreGameManager.CountBoxForLevel)
+        switch (size)
         {
             case 3:
                 grid = new Vector3[9]
@@ -79,6 +79,15 @@ public class Creater : MonoBehaviour
                 break;
         }
 
+        return grid;
+    }
+
+    private void GenerateNewBox()
+    {
+        Vector3[] grid = GetGrid(_coreGameManager.CountBoxForLevel);
+
+        _blocks = new List<BlockColor>();
+
         BlockColor block;
 
         foreach (var pos in grid)
@@ -95,10 +104,8 @@ public class Creater : MonoBehaviour
         CreateColorForBox();
     }
 
-    private void UpdateBox() //метод на запуски под уровней (промежутка между уровнями, когда не все блоки пропали с поля)
+    private void UpdateBox()
     {
-        Debug.Log(_coreGameManager.ColorObjects.Count);
-
         ColorObject correct = _coreGameManager.ColorObjects[_coreGameManager.ColorObjects.Count - 1];
 
         _colorUI.UpdateText(correct);
@@ -126,36 +133,21 @@ public class Creater : MonoBehaviour
 
     private void CreateColorForBox() //метод на первый запуск уровня
     {
-        Debug.Log(_coreGameManager.ColorObjects.Count);
-        ColorObject correct = _coreGameManager.ColorObjects[_coreGameManager.ColorObjects.Count - 1];
-
-        _colorUI.UpdateText(correct);
-
-        _coreGameManager.UncorrectCount = 0;
-        _coreGameManager.CorrectCount = 0;
-
-        for(int i = 0; i < _blocks.Count; i++)
+        if (_coreGameManager.Level != _level)
         {
-            ColorObject randomColor = _coreGameManager.ColorObjects[Random.Range(0, _coreGameManager.ColorObjects.Count)];
-
-            if(i < _coreGameManager.ColorObjects.Count) //Задать минимум по 1 блоку каждого из доступных цветов
+            for (int i = 0; i < _blocks.Count; i++)
             {
-                randomColor = _coreGameManager.ColorObjects[i];
-            }
+                ColorObject randomColor = _coreGameManager.ColorObjects[Random.Range(0, _coreGameManager.ColorObjects.Count)];
 
-            if (_blocks[i].gameObject.activeSelf)
-            {
-                if (randomColor.Color == correct.Color)
+                if (i < _coreGameManager.ColorObjects.Count) //Задать минимум по 1 блоку каждого из доступных цветов
                 {
-                    _blocks[i].Decorate(new CorrectBlock(new NullBlock(randomColor.Color)));
-                    _coreGameManager.CorrectCount++;
+                    randomColor = _coreGameManager.ColorObjects[i];
                 }
-                else
-                {
-                    _blocks[i].Decorate(new UncorrectBlock(new NullBlock(randomColor.Color)));
-                    _coreGameManager.UncorrectCount++;
-                }
+
+                _blocks[i].Decorate(new NullBlock(randomColor.Color));
             }
         }
+
+        UpdateBox();
     }
 }
