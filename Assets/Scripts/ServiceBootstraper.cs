@@ -4,11 +4,11 @@ using UnityEngine;
 
 public static class ServiceBootstraper
 {
-    /*[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
     public static void Init()
     {
-        GenericLocator.Register<ILogContract>(new SystemDebugger());
+        GenericLocator.Register<ILogContract>(new SystemDebuger());
         GenericLocator.Register<ISaveContract>(new CloudStorage());
     }
-    */
+    
 }
